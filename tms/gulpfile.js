@@ -28,4 +28,12 @@ elixir(function(mix) {
         "semantic.min.js"
     ],'public/js/semantic.js');
 
+    mix.scripts([
+        "bootstrap.min.js"
+    ],'public/js/bootstrap.js');
+
+    mix.scripts([
+        "underscore.js"
+    ],'public/js/underscore.js');
+
 });

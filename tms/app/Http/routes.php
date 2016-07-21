@@ -62,3 +62,7 @@ Route::post('/login','TestController@login');
 *The routes for logs views
 */
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');

@@ -1,41 +1,30 @@
-var _app = function(){};
+var _app = function(){
+	this.baseUrl = '/tms/public/';
+};
 
 
 if (typeof $ !== 'function')
 	throw new Error('JQuery not include in app');
 
 _app.prototype = {
-	loading : function(act){
-		var obj = $('.loadingArea');
-		if(obj.length == 0)
-			return;
+	sendData : function(url,data){
+		var parent = this;
+		url = _.contains(url,this.baseUrl) ? void 0 : (this.baseUrl + url);
+		console.log(url);
+		var request = $.ajax({
+			url : url,	
+			data : data,
+			datatype : 'json',
+			method : 'POST',
+			async : false
+		})
 
-		if (act == 'show')
-			obj.show(1);
-		else
-			obj.hide(1);
-
+		request.done(function(event){
+			console.log(event);
+		})
 	},
 	LoginEvent : function(){
 		var parent = this;
-
-		var sendData = function() {
-			var _form = $('.form-login');
-			parent.loading('show');
-
-			var request = $.ajax({
-				url : 'login',
-				data : _form.serialize(),
-				datatype : 'json',	
-				method : 'POST'
-			})
-
-			request.done(function(res){	
-				console.log(res);
-				parent.loading('hide');
-			});
-			/*alert(_form.serialize());*/
-		}
 
 		var clickLogin = function() {
 			
@@ -43,7 +32,8 @@ _app.prototype = {
 
 				if(btnLogin.length > 0) {
 					btnLogin.click(function(event){
-						sendData();	
+						var _form = $('.form-login');
+						parent.sendData('login',{_form.serialize()});	
 					});
 				} else {
 					var interval = setInterval(function(){
@@ -93,5 +83,7 @@ $(document).ready(function(){
 		console.log(e);
 	}
 });
+
+//# sourceMappingURL=all.js.map
 
 //# sourceMappingURL=all.js.map
