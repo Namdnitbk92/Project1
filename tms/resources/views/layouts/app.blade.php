@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="_token" content="{!! csrf_token() !!}"/>
     <title>Laravel</title>
 
     <!-- Fonts -->
@@ -14,6 +14,10 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ URL::asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('css/semantic.min.css') }}">
+
+    <!-- data tables css -->
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+
 
     <style>
         body {
@@ -26,6 +30,7 @@
     </style>
 </head>
 <body id="app-layout">
+
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
@@ -47,15 +52,15 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/home') }}">Home</a></li>
+                    <li><a href="{{ url('/home') }}"> <i class="fa fa-home"></i>  Home</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
-                       <!--  <li><a href="{{ url('/login') }}">Login</a></li>
-                        <li><a href="{{ url('/register') }}">Register</a></li> -->
+                        <li><a href="{{ url('/login') }}"> <i class="fa fa-sign-in"></i>    Login</a></li>
+                        <li><a href="{{ url('/register') }}">Register</a></li>
                     @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -70,10 +75,23 @@
                 </ul>
             </div>
         </div>
+        <div class="sub-nav"><i class="fa fa-dropbox"></i> The TMS System</div>
     </nav>
 
-    @yield('content')
-
+    <div class="ui left demo vertical inverted sidebar labeled icon menu">
+          <a class="item">
+            <i class="home icon"></i>
+            Home
+          </a>
+          <a class="item">
+            <i class="block layout icon"></i>
+            Topics
+          </a>
+          <a class="item">
+            <i class="smile icon"></i>
+            Friends
+          </a>
+    </div>
     <!-- JavaScripts -->
 
     <script type="text/javascript" src="{{ URL::asset('js/jquery.js') }}"></script>
@@ -81,6 +99,17 @@
     <script type="text/javascript" src="{{ URL::asset('js/underscore.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/bootstrap.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/all.js') }}"></script>
+
+    <!-- data tables JQuery -->
+   <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $.ajaxSetup({
+           headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+        });
+    </script>
+
+    @yield('content')
 
 </body>
 </html>

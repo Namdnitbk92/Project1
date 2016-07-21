@@ -1,31 +1,57 @@
 var _app = function(){
-	this.baseUrl = '/tms/public/';
+	this.baseUrl = '/Project1/tms/public/';
 };
-
 
 if (typeof $ !== 'function')
 	throw new Error('JQuery not include in app');
 
 _app.prototype = {
-	sendData : function(url,data){
-		var parent = this;
-		url = _.contains(url,this.baseUrl) ? void 0 : (this.baseUrl + url);
-		console.log(url);
-		var request = $.ajax({
-			url : url,	
-			data : data,
-			datatype : 'json',
-			method : 'POST',
-			async : false
-		})
+	Loading : function(action){
+		var loading = $('.loadingArea');
+		if(action === 'show') 
+			loading.show(1);
+		else
+			loading.hide(1);	
+	},
+	Request : function(_this){
+		var parent = _this;
+		/*get data from form-date*/
+		var processData = function(data){
+			if(_.contains(data,'&'))
+			{
+				data = data.split('&');
+				var obj  = {};
+				for(var k in data) {
+					var temp = _.contains(data[k],'=') ? data[k].split('=') : void 0;
+					if(Array.isArray(temp))
+						obj[temp[0]] = temp[1];
+				}
+				return obj;
+			}	
 
-		request.done(function(event){
-			console.log(event);
-		})
+			return data;
+		};
+
+		return {
+				sendData : function(url,data){
+					var request = $.ajax({
+						url : url,	
+						data : processData(data),
+						dataType : 'json',
+						method : 'POST',
+						complete  :function(res){
+							setTimeout(function(){
+								parent.Loading('hide');
+							},1000);
+							
+						}
+					})
+
+				}
+		}
 	},
 	LoginEvent : function(){
 		var parent = this;
-
 		var clickLogin = function() {
 			
 			var btnLogin = $('.btn-login');
@@ -33,7 +59,8 @@ _app.prototype = {
 				if(btnLogin.length > 0) {
 					btnLogin.click(function(event){
 						var _form = $('.form-login');
-						parent.sendData('login',{_form.serialize()});	
+						parent.Loading('show');
+						new parent.Request(parent).sendData('login',_form.serialize());
 					});
 				} else {
 					var interval = setInterval(function(){
@@ -68,21 +95,84 @@ _app.prototype = {
 	},
 	OtherEvent : function(){
 	},
+	useDataTable : function(colName,data,config){
+		/*init table*/
+		var TableBuilder = function(){};
+		TableBuilder.prototype = {
+			createCol : function(col){
+				if(!Array.isArray(col))
+					return '';
+
+				var strCol = '<table class="display" cellspacing="0" width="100%">';
+				strCol += '<thead>';
+				for(var i = 0 ;i < col.length; i++) {
+					strCol += '<th>' + col[i] + '</th>';	
+				}	
+				strCol += '<thead>';
+
+				return strCol;
+			},
+			fillContent : function(data){
+				var tbody = '<tbody>';
+				var body = '';
+				if(Array.isArray(data)) {
+					for(var d in data) {
+						var iterator = data[d];
+						body += '<tr>'
+						for(var k in iterator)
+							body += '<td>' + iterator[k]+ '</td>';	
+
+
+					}
+				}
+				return tbody + body + '<tbody>';
+			},
+			run : function(col,data){
+				return this.createCol(col) + this.fillContent(data);
+			}
+		}
+
+		var tableId = config.id ? config.id : null;
+
+		if(_.isNull(tableId) == null  || _.isUndefined(tableId))
+			throw new Error('use dataTable required id for table!');
+
+		var tableObj = $('#' + tableId);
+		if(tableObj.length == 0)
+			throw new Error('DOM Element #' + tableId + ' not exists');
+
+		builder = new TableBuilder();
+		tableObj.html(builder.run(colName,data));
+		tableObj.DataTable(config);
+		/*style custom for data table*/
+		document.getElementById("my-table").style.boxShadow = "rgba(0, 0, 0, 0.2) 0px 4px 8px 0px, rgba(0, 0, 0, 0.188235) 0px 6px 20px 0px";
+		
+		var wrapper = $('#' + tableId +'_wrapper');
+		if(wrapper.length > 0) {
+			$(_.first(wrapper.find('input'))).css('outline','none');
+			$(_.first(wrapper.find('input'))).css('border-radius','10px');
+		}
+	},
 	run : function(){
 		this.LoginEvent();
 	}
 }
 
+var app = new _app();
+
 $(document).ready(function(){
 	/*init global object use in app*/
-	var app = new _app();
 	try{
 		app.run();
+		console.log(123123)
 	}catch(e)
 	{
 		console.log(e);
 	}
 });
+
+//# sourceMappingURL=all.js.map
+
 
 //# sourceMappingURL=all.js.map
 

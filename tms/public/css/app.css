@@ -57,7 +57,7 @@
 /*css for form login*/
 .login-container {
   max-width: 40%;
-  margin: 10% 30% !important; }
+  margin: 0% 30% !important; }
 
 .icon-login {
   position: absolute;
@@ -75,6 +75,32 @@
   opacity: 0.8; }
   .loadingArea > img {
     margin-top: 15%; }
+
+#app-layout {
+  background: #ddd !important; }
+  #app-layout > nav {
+    background: #A53F3F;
+    height: 120px; }
+    #app-layout > nav > .container > .navbar-header > a {
+      color: white !important;
+      font-weight: bold; }
+    #app-layout > nav > .container > #app-navbar-collapse > ul > li > a {
+      color: white !important;
+      font-weight: bold; }
+    #app-layout > nav > .sub-nav {
+      color: white !important;
+      font-weight: bold;
+      font-size: xx-large;
+      margin: 1% 6% 6% 6%; }
+
+.panel-heading {
+  background: #337ab7 !important;
+  color: white !important;
+  font-weight: bold !important; }
+
+.dataTable > thead {
+  background: rgba(51, 122, 183, 0.78);
+  color: white; }
 
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
