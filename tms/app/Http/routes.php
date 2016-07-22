@@ -16,46 +16,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login',function(){
-	return view('layouts/login');
-});
+/*
+* Routes for login with social account
+*/
 
-Route::get('/master', function () {
-    return view('layouts/master');
-});
+Route::get('login/{accountSocial}/redirect','SocialAuthController@redirect');
 
-Route::get('test/{id}', function ($id) {
-	return redirect()->route('child');
-})->where('id', '[A-Za-z]+');
+Route::get('login/socialNetwork/callback','SocialAuthController@callback');
 
-Route::get('/task/{locale}','TestController@paging');
-
-Route::get('/child', ['as'=>'child',function () {
-    return view('layouts/child',['name' => 'Dinh Ngoc Nam']);
-}]);
-
-Route::get('/task/{locale}/{page?}','TestController@showPage');
-
-Route::post('/task',function(Request $request){	
-
-	$validator = Validator::make($request->all(),[
-		'name' => 'required|max:255'
-	]);
-
-	if($validator->fails())
-	{
-		return redirect('/')->withInput()->withErrors($validator);
-	}
-
-	$task = new Task;
-	$task->name = $request->name;
-	$task->save();
-
-	return redirect('/task');
-});
-
-
-Route::post('/login','TestController@login');
+Route::get('login/socialNetwork/callbackTwitter','SocialAuthController@callbackTwitter');
+Route::get('login/socialNetwork/callbackGmail','SocialAuthController@callbackGmail');
 
 /**
 *

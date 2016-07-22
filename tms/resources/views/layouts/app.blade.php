@@ -16,8 +16,7 @@
     <link rel="stylesheet" href="{{ URL::asset('css/semantic.min.css') }}">
 
     <!-- data tables css -->
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
-
+     <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
 
     <style>
         body {
@@ -44,16 +43,16 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <!-- <a class="navbar-brand" href="{{ url('/') }}">
                     Laravel
-                </a>
+                </a> -->
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
+                <!-- <ul class="nav navbar-nav">
                     <li><a href="{{ url('/home') }}"> <i class="fa fa-home"></i>  Home</a></li>
-                </ul>
+                </ul> -->
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
@@ -64,9 +63,11 @@
                     @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
+                                <img class="avatar" src="{{Auth::user()->avatar }}"/>
+                                &nbsp;&nbsp;{{ Auth::user()->name}} <span class="caret"></span>
 
+                            </a>
+                            <mail>{{ Auth::user()->email}}</mail> 
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
@@ -76,6 +77,13 @@
             </div>
         </div>
         <div class="sub-nav"><i class="fa fa-dropbox"></i> The TMS System</div>
+        <div class="ui fluid category search">
+          <div class="ui icon input">
+            <input class="prompt" type="text" placeholder="Search animals...">
+            <i class="search icon"></i>
+          </div>
+          <div class="results"></div>
+        </div>
     </nav>
 
     <div class="ui left demo vertical inverted sidebar labeled icon menu">

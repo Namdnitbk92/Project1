@@ -13,6 +13,13 @@ _app.prototype = {
 		else
 			loading.hide(1);	
 	},
+	initAnimate : function(){
+		var animate = $('.sub-nav');
+		if(animate.length > 0)
+			setTimeout(function(){
+				animate.transition('jiggle');
+			},400);
+	},
 	Request : function(_this){
 		var parent = _this;
 		/*get data from form-date*/
@@ -155,6 +162,7 @@ _app.prototype = {
 	},
 	run : function(){
 		this.LoginEvent();
+		this.initAnimate();
 	}
 }
 
@@ -164,16 +172,11 @@ $(document).ready(function(){
 	/*init global object use in app*/
 	try{
 		app.run();
-		console.log(123123)
 	}catch(e)
 	{
 		console.log(e);
 	}
 });
 
-//# sourceMappingURL=all.js.map
-
-
-//# sourceMappingURL=all.js.map
 
 //# sourceMappingURL=all.js.map

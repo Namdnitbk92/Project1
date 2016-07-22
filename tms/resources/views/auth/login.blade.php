@@ -67,6 +67,7 @@
       <img src="{{ URL::asset('images/loading.gif') }}" alt="Loading..."> 
       <p>Loading...</p>
 </div>
+
 <div class="login-container ui middle aligned center aligned grid">
        <!--  <img src="{{ URL::asset('images/framgia.png') }}" class="image"> -->
           <div class="column">
@@ -115,18 +116,18 @@
             <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
 
             <div class="social-container">
-              <button class="ui circular facebook icon button">
+                <a class="ui circular facebook icon button" href="login/facebook/redirect">
                   <i class="facebook icon"></i>
-                </button>
-                <button class="ui circular twitter icon button">
+                </a>
+                <a class="ui circular twitter icon button" href="login/twitter/redirect">
                   <i class="twitter icon"></i>
-                </button>
-                <button class="ui circular linkedin icon button">
+                </a>
+                <a class="ui circular linkedin icon button">
                   <i class="linkedin icon"></i>
-                </button>
-                <button class="ui circular google plus icon button">
+                </a>
+                <a class="ui circular google plus icon button" href="login/google/redirect">
                   <i class="google plus icon"></i>
-                </button>
+                </a>
           </div> 
           </div>
         </div>

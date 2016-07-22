@@ -80,7 +80,7 @@
   background: #ddd !important; }
   #app-layout > nav {
     background: #A53F3F;
-    height: 120px; }
+    height: 70px; }
     #app-layout > nav > .container > .navbar-header > a {
       color: white !important;
       font-weight: bold; }
@@ -91,7 +91,7 @@
       color: white !important;
       font-weight: bold;
       font-size: xx-large;
-      margin: 1% 6% 6% 6%; }
+      margin: -3% 6% 6% 6%; }
 
 .panel-heading {
   background: #337ab7 !important;
@@ -101,6 +101,17 @@
 .dataTable > thead {
   background: rgba(51, 122, 183, 0.78);
   color: white; }
+
+.avatar {
+  border-radius: 50% !important;
+  width: 30px !important;
+  height: 30px !important; }
+
+.ui.fluid.category.search {
+  top: -110px;
+  right: -35%; }
+  .ui.fluid.category.search > .input > input {
+    width: 400px !important; }
 
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
