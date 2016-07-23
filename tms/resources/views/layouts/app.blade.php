@@ -22,10 +22,6 @@
         body {
             font-family: 'Lato';
         }
-
-        .fa-btn {
-            margin-right: 6px;
-        }
     </style>
 </head>
 <body id="app-layout">
@@ -33,7 +29,8 @@
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
-
+                <i class="fa fa-dropbox"></i>
+                <a style="outline : none;" href="{{url('/')}}">TMS System</a>
                 <!-- Collapsed Hamburger -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
                     <span class="sr-only">Toggle Navigation</span>
@@ -67,23 +64,20 @@
                                 &nbsp;&nbsp;{{ Auth::user()->name}} <span class="caret"></span>
 
                             </a>
-                            <mail>{{ Auth::user()->email}}</mail> 
+                            <!-- <mail>{{ Auth::user()->email}}</mail> --> 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out fa-fw"></i>Logout</a></li>
+                                <li><a href="{{ url('/profile') }}"><i class="fa fa-btn fa-user fa-fw"></i>Profile</a></li>
+                                <li><a href="{{ url('/profile') }}"><i class="fa fa-btn fa-bolt fa-fw"></i>Languages</a></li>
                             </ul>
                         </li>
                     @endif
                 </ul>
             </div>
         </div>
-        <div class="sub-nav"><i class="fa fa-dropbox"></i> The TMS System</div>
-        <div class="ui fluid category search">
-          <div class="ui icon input">
-            <input class="prompt" type="text" placeholder="Search animals...">
-            <i class="search icon"></i>
-          </div>
-          <div class="results"></div>
-        </div>
+        @if (!Auth::guest())
+         @include('layouts.navbar')
+        @endif
     </nav>
 
     <div class="ui left demo vertical inverted sidebar labeled icon menu">
@@ -116,8 +110,12 @@
            headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
         });
     </script>
-
-    @yield('content')
-
+    @if (!Auth::guest())
+    <div id="page-wrapper">
+        @yield('content')    
+    </div>
+    @else
+         @yield('content')    
+    @endif
 </body>
 </html>

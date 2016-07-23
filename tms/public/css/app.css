@@ -77,21 +77,24 @@
     margin-top: 15%; }
 
 #app-layout {
-  background: #ddd !important; }
+  background: #f8f8f8 !important; }
   #app-layout > nav {
     background: #A53F3F;
     height: 70px; }
-    #app-layout > nav > .container > .navbar-header > a {
-      color: white !important;
-      font-weight: bold; }
-    #app-layout > nav > .container > #app-navbar-collapse > ul > li > a {
-      color: white !important;
-      font-weight: bold; }
-    #app-layout > nav > .sub-nav {
+    #app-layout > nav > .container > .navbar-header {
       color: white !important;
       font-weight: bold;
-      font-size: xx-large;
-      margin: -3% 6% 6% 6%; }
+      text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+      font-size: x-large;
+      margin-top: 2%; }
+      #app-layout > nav > .container > .navbar-header > a {
+        color: white !important;
+        font-weight: bold;
+        text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6); }
+    #app-layout > nav > .container > #app-navbar-collapse > ul > li > a {
+      color: white !important;
+      font-weight: bold;
+      text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6); }
 
 .panel-heading {
   background: #337ab7 !important;
@@ -112,6 +115,45 @@
   right: -35%; }
   .ui.fluid.category.search > .input > input {
     width: 400px !important; }
+
+@media (min-width: 768px) {
+  .sidebar {
+    z-index: 1;
+    position: absolute;
+    width: 250px;
+    margin-top: 9px; }
+  .navbar-top-links .dropdown-messages,
+  .navbar-top-links .dropdown-tasks,
+  .navbar-top-links .dropdown-alerts {
+    margin-left: auto; } }
+
+#page-wrapper {
+  padding: 0 15px;
+  min-height: 568px;
+  background-color: #fff; }
+
+@media (min-width: 768px) {
+  #page-wrapper {
+    position: inherit;
+    margin: -19px 0 0 250px;
+    padding: 0 30px;
+    border-left: 1px solid #e7e7e7; }
+    #page-wrapper > .row > .body-content {
+      margin-top: 3%; } }
+
+body > .intro-header {
+  height: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
+  color: #f8f8f8;
+  background: url(../images/landing-page.jpg) no-repeat center center;
+  background-size: cover;
+  margin-top: -2%; }
+  body > .intro-header > .container > .row > .landing-page {
+    padding-top: 20%;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+    font-size: 3em; }
 
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
