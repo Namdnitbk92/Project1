@@ -22,23 +22,27 @@
                   <div class="ui left icon input {{ $errors->has('email') ? ' has-error' : '' }}">
                     <i class="icon-login fa fa-user"></i>
                     <input type="email" name="email" placeholder="E-mail address" value="{{ old('email') }}">
-                    @if ($errors->has('email'))
+                  </div>
+                </div>
+                <div class="field">
+                  @if ($errors->has('email'))
                         <span class="help-block">
                             <strong>{{ $errors->first('email') }}</strong>
                         </span>
                     @endif
-                  </div>
                 </div>
                 <div class="field">
                   <div class="ui left icon input {{ $errors->has('password') ? ' has-error' : '' }}">
                     <i class="fa fa-lock icon-login"></i>
                     <input type="password" name="password" placeholder="Password" value="{{ old('password') }}">
-                    @if ($errors->has('password'))
+                  </div>
+                </div>
+                <div class="field">
+                  @if ($errors->has('password'))
                         <span class="help-block">
                             <strong>{{ $errors->first('password') }}</strong>
                         </span>
                     @endif
-                  </div>
                 </div>
                 <button type="submit" class="ui fluid large teal submit button btn-login">Login</button>
               </div>

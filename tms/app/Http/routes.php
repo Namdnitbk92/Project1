@@ -9,28 +9,60 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-use Illuminate\Http\Request;
-use App\Task;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware'=>'web'], function() {
+
+	Route::group(['middleware'=>'admin'],function() {
+			Route::resource('admin','AdminController',['only'=>['index','show']]);
+	});
+
+	Route::group(['middleware'=>'sup'],function() {
+			Route::resource('sup','SupController');
+	});
+
+	Route::group(['middleware'=>'user'],function() {
+			Route::resource('user','UserController');
+	});
+
+	Route::group(['middleware'=>'auth'],function() {
+			Route::resource('course','CourseController');
+
+			Route::get('/dashboard',[
+				'as'=>'dashboard',
+				'uses'=>'HomeController@index'	
+			]);
+	});
+
+	Route::group(['prefix'=>'login'],function() {
+
+		Route::get('socialNetwork/callback',[
+				'as' => 'callbackSocial',
+				'uses' => 'SocialAuthController@callback',
+		]);
+
+		Route::get('socialNetwork/callbackTwitter',[
+			'as' => 'loginWithSocialNetwork',
+			'uses' => 'SocialAuthController@callbackTwitter',
+		]);
+
+		Route::get('socialNetwork/callbackGmail',[
+			'as' => 'loginWithSocialNetwork',
+			'uses' => 'SocialAuthController@callbackGmail',
+		]);
+
+		Route::get('{accountSocial}/redirect',[
+			'as' => 'loginWithSocialNetwork',
+			'uses' => 'SocialAuthController@redirect',
+		]);
+
+	});
+
+	Route::get('/', function () {
+	    return view('welcome');
+	});
 });
 
-/*
-* Routes for login with social account
-*/
 
-Route::get('login/{accountSocial}/redirect','SocialAuthController@redirect');
-
-Route::get('login/socialNetwork/callback','SocialAuthController@callback');
-
-Route::get('login/socialNetwork/callbackTwitter','SocialAuthController@callbackTwitter');
-Route::get('login/socialNetwork/callbackGmail','SocialAuthController@callbackGmail');
-
-/**
-*
-*The routes for logs views
-*/
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::auth();

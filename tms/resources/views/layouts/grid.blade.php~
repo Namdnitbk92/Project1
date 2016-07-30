@@ -1,0 +1,145 @@
+<div class="responstable-toolbar">
+	<button class="ui facebook button">
+	  <i class="add circle icon"></i>
+	  Add Course
+	</button>
+	
+	<button class="ui twitter red button">
+	  <i class="trash icon"></i>
+	  Twitter
+	</button>
+</div>
+<table class="responstable">
+  
+  <tbody><tr>
+    <th>Main driver</th>
+    <th data-th="Driver details"><span>First name</span></th>
+    <th>Surname</th>
+    <th>Date of birth</th>
+    <th>Relationship</th>
+    <th>Action</th>
+  </tr>
+  
+  <tr>
+    <td><input type="radio"></td>
+    <td>Steve</td>
+    <td>Foo</td>
+    <td>01/01/1978</td>
+    <td>Policyholder</td>
+    <td>
+    	<button class="ui circular facebook icon button">
+		  <i class="facebook icon"></i>
+		</button>
+		<button class="ui circular twitter icon button">
+		  <i class="twitter icon"></i>
+		</button>
+    </td>
+  </tr>
+  
+  <tr>
+    <td><input type="radio"></td>
+    <td>Steffie</td>
+    <td>Foo</td>
+    <td>01/01/1978</td>
+    <td>Spouse</td>
+    <td>
+    	<button class="ui circular facebook icon button">
+		  <i class="facebook icon"></i>
+		</button>
+		<button class="ui circular twitter icon button">
+		  <i class="twitter icon"></i>
+		</button>
+    </td>
+  </tr>
+  
+  <tr>
+    <td><input type="radio"></td>
+    <td>Stan</td>
+    <td>Foo</td>
+    <td>01/01/1994</td>
+    <td>Son</td>
+    <td>
+    	<button class="ui circular facebook icon button">
+		  <i class="facebook icon"></i>
+		</button>
+		<button class="ui circular twitter icon button">
+		  <i class="edit icon"></i>
+		</button>
+    </td>
+  </tr>
+  
+  <tr>
+    <td><input type="radio"></td>
+    <td>Stella</td>
+    <td>Foo</td>
+    <td>01/01/1992</td>
+    <td>Daughter</td>
+    <td>
+    	<button class="ui circular facebook icon button">
+		  <i class="facebook icon"></i>
+		</button>
+		<button class="ui circular twitter icon button">
+		  <i class="twitter icon"></i>
+		</button>
+    </td>
+  </tr>
+  
+  
+</tbody></table>
+
+
+<table class="ui red table">
+  <thead>
+    <tr><th>Food</th>
+    <th>Calories</th>
+    <th>Protein</th>
+     <th>Protein</th>
+  </tr></thead><tbody>
+    <tr>
+      <td>Apples</td>
+      <td>200</td>
+      <td>0g</td>
+      <td>
+    	<button class="ui circular facebook icon button">
+		  <i class="facebook icon"></i>
+		</button>
+		<button class="ui circular twitter icon button">
+		  <i class="twitter icon"></i>
+		</button>
+    </td>
+    </tr>
+    <tr>
+      <td>Orange</td>
+      <td>310</td>
+      <td>0g</td>
+      <td>0g</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<div class="ui modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Profile Picture
+  </div>
+  <div class="image content">
+    <div class="ui medium image">
+      <img src="/images/avatar/large/chris.jpg">
+    </div>
+    <div class="description">
+      <div class="ui header">We've auto-chosen a profile image for you.</div>
+      <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
+      <p>Is it okay to use this photo?</p>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">
+      Nope
+    </div>
+    <div class="ui positive right labeled icon button">
+      Yep, that's me
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>

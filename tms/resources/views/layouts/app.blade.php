@@ -46,13 +46,21 @@
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                <div class="input-group custom-search-form input-search col-md-5 col-sm-5 col-lg-5">
+                    <input type="text" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
                 <!-- Left Side Of Navbar -->
                 <!-- <ul class="nav navbar-nav">
                     <li><a href="{{ url('/home') }}"> <i class="fa fa-home"></i>  Home</a></li>
                 </ul> -->
 
                 <!-- Right Side Of Navbar -->
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right margin-top-3">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
                         <li><a href="{{ url('/login') }}"> <i class="fa fa-sign-in"></i>    Login</a></li>
@@ -62,7 +70,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 <img class="avatar" src="{{Auth::user()->avatar }}"/>
                                 &nbsp;&nbsp;{{ Auth::user()->name}} <span class="caret"></span>
-
+                                <!-- <img src="{{ Gravatar::src(Auth::user()->email,50) }}"> -->
                             </a>
                             <!-- <mail>{{ Auth::user()->email}}</mail> --> 
                             <ul class="dropdown-menu" role="menu">
@@ -76,26 +84,14 @@
             </div>
         </div>
         @if (!Auth::guest())
-         @include('layouts.navbar')
+        @include('layouts.navbar')
+        <!-- <div class="top-left ui breadcrumb">
+              <a class="section">Home</a>
+              <i class="right angle icon divider"></i>
+              <div class="active section">Course</div>
+        </div> -->
         @endif
     </nav>
-<!-- 
-    <div class="ui left demo vertical inverted sidebar labeled icon menu">
-          <a class="item">
-            <i class="home icon"></i>
-            Home
-          </a>
-          <a class="item">
-            <i class="block layout icon"></i>
-            Topics
-          </a>
-          <a class="item">
-            <i class="smile icon"></i>
-            Friends
-          </a>
-    </div> -->
-    <!-- JavaScripts -->
-
     <script type="text/javascript" src="{{ URL::asset('js/jquery.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/semantic.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/underscore.js') }}"></script>

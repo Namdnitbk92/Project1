@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTasks extends Migration
+class CreateCoursesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,14 @@ class CreateTasks extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('courses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->text('description');
+            $table->tinyInteger('status');
+            $table->datetime('start_date');
+            $table->datetime('end_date');
+            $table->string('image_url');
             $table->timestamps();
         });
     }
@@ -26,6 +31,6 @@ class CreateTasks extends Migration
      */
     public function down()
     {
-        Schema::drop('tasks');
+        Schema::drop('courses');
     }
 }

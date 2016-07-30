@@ -59,6 +59,7 @@ _app.prototype = {
 	},
 	LoginEvent : function(){
 		var parent = this;
+		var args = [];
 		var clickLogin = function() {
 			
 			var btnLogin = $('.btn-login');
@@ -94,11 +95,56 @@ _app.prototype = {
 			}) : void 0;
 		}
 
-		return (function(c,t){
-			typeof c === "function" ? c() : void 0;
-			typeof t === "function" ? t() : void 0;	
-		}(clickLogin,triggerTooltip))
+		var course = function(){};
 
+		course.prototype.event = function() {
+			var add = $('.add-course');
+			/*var modal = $('#add-course-modal');*/
+			var subjectList = $('select[name="subjectList"]');
+			var container = $('#subject_list');
+
+			subjectList.change(function() {
+				var temp = container.data('value');
+				var selected = $('.subjectSelected');
+				temp = temp === undefined ? '-' : temp;
+
+				if(!subjectList.val())
+					return;
+
+				temp += ', ' + subjectList.val();
+				container.data('value',temp);
+				$('input[name="subjectData"]').val(temp);
+				selected.html(container.data('value'));
+				$('.pl').transition('jiggle');
+			});
+			
+			/*add.click(function(){
+				modal.modal('show');
+			})*/
+
+		}
+
+		course.prototype.run = function()
+		{
+			this.event();
+		}
+
+		new course().run();
+
+		args.push(clickLogin);
+		args.push(triggerTooltip);
+		args.push(c.run);
+
+		return (function(args) {
+
+			if(args.length == 0)
+				return;
+
+			for(var k in args) {
+				typeof args[k] === "function" ? args[k]() : void 0;
+			}
+
+		}(args))
 	},
 	OtherEvent : function(){
 	},
@@ -160,6 +206,13 @@ _app.prototype = {
 			$(_.first(wrapper.find('input'))).css('border-radius','10px');
 		}
 	},
+	redirect : function(url)
+	{
+		if(_.isNull(url) || _.isUndefined(url))
+			return;
+
+		window.location.href = url;
+	}, 
 	run : function(){
 		this.LoginEvent();
 		this.initAnimate();
@@ -178,3 +231,5 @@ $(document).ready(function(){
 	}
 });
 
+
+//# sourceMappingURL=all.js.map
