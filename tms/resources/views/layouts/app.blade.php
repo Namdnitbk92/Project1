@@ -106,6 +106,10 @@
            headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
         });
     </script>
+    <div id="_loader" class="loadingArea" style="display: none;">
+        <img src="{{ URL::asset('images/loading.gif') }}" alt="Loading...">
+        <p>Loading...</p>
+    </div>
     @if (!Auth::guest())
     <div id="page-wrapper">
         @yield('content')    

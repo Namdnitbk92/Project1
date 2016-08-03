@@ -141,4 +141,11 @@ class CourseController extends Controller
 
         return redirect()->route('course.index')->withSuccess('delete success');
     }
+
+    public function search(Request $request)
+    {
+        $term = $request->input('term');
+        $course = $this->courseRepository->search($term);
+        return view('layouts.course.list',['courses'=>$course, 'search' => true]);
+    }
 }

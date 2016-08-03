@@ -16,12 +16,6 @@ Route::group(['middleware'=>'web'], function() {
 			Route::resource('admin','AdminController',['only'=>['index','show']]);
 	});
 
-	Route::group(['middleware'=>'admin'],function() {
-			Route::resource('test.course','TestController', [
-				'paramters' => 'singular'
-			]);
-	});
-
 	Route::group(['middleware'=>'sup'],function() {
 			Route::resource('sup','SupController');
 	});
@@ -33,11 +27,28 @@ Route::group(['middleware'=>'web'], function() {
 	Route::group(['middleware'=>'auth'],function() {
 			Route::resource('course','CourseController');
 
+            Route::get('exportExcel',[
+                'as'=>'exportExcel',
+                'uses'=>'HomeController@exportExcel'
+            ]);
+
+            Route::get('exportCSV',[
+                'as'=>'exportCSV',
+                'uses'=>'HomeController@exportCSV'
+            ]);
+
+            Route::get('search',[
+                'as'=>'search',
+                'uses'=>'CourseController@search'
+            ]);
+
 			Route::get('/dashboard',[
 				'as'=>'dashboard',
 				'uses'=>'HomeController@index'	
 			]);
 	});
+
+
 
 	Route::group(['prefix'=>'login'],function() {
 

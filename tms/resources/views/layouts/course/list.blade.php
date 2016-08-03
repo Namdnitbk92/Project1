@@ -11,9 +11,11 @@
             <p>{{ session()->has('success') ? session('success') : session('errors') }}</p>
         </div>
         @endif
+
         <div class="panel panel-default">
             <div class="panel-heading">
-            	Course List
+                <h3>Course List</h3>
+                <i class="fa fa-refresh" onclick="app.redirect(&quot;{{ route('course.index') }}&quot;)"></i>
             </div>
             <div class="panel-body">
             	@include('layouts.grid')

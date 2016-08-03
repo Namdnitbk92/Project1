@@ -9,19 +9,25 @@ class Course extends Model
     protected $table = 'courses';
 
     protected $fillable = [
-                            'name',
-                            'description',
-                            'start_date',
-                            'end_date',
-                            'image_url',
-                            'status',
-                          ];
+        'id',
+        'name',
+        'description',
+        'start_date',
+        'end_date',
+        'image_url',
+        'status',
+    ];
 
-    protected $dates = ['start_date', 'end_date']; 
+    protected $dates = ['start_date', 'end_date'];
+
+    public function getColumn()
+    {
+        return $this->fillable;
+    }
 
     public function course_subject()
     {
-    	return $this->hasMany(CourseSubject::class);
-    }                  
+        return $this->hasMany(CourseSubject::class);
+    }
 
 }

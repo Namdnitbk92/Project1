@@ -71,7 +71,7 @@
   width: 100%;
   background-color: #1E2225;
   text-align: center;
-  z-index: 100;
+  z-index: 1000;
   opacity: 0.8; }
   .loadingArea > img {
     margin-top: 15%; }
@@ -99,7 +99,10 @@
 .panel-heading {
   background: #337ab7 !important;
   color: white !important;
-  font-weight: bold !important; }
+  font-weight: bold !important;
+  display: -webkit-box; }
+  .panel-heading > i {
+    padding: 5px; }
 
 .dataTable > thead {
   background: rgba(51, 122, 183, 0.78);

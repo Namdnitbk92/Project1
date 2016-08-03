@@ -23,7 +23,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
+        $this->registerCourseRepo();
+    }
+
+    public function registerCourseRepo()
+    {
+        return $this->app->bind(
             'App\Repositories\Course\CourseRepositoryInterface',
             'App\Repositories\Course\CourseRepository'
         );

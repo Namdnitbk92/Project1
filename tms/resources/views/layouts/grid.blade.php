@@ -8,15 +8,26 @@
         <i class="trash icon"></i>
     </button>
 
-    <button class="ui circular yellow icon button btn-excel">
+    <button class="ui circular yellow icon button btn-excel"
+            onclick="app.redirect(&quot;{{route('exportExcel')}}&quot;)">
         <i class="file excel outline icon"></i>
+    </button>
+
+    <button class="ui circular orange icon button btn-excel"
+            onclick="app.redirect(&quot;{{route('exportCSV')}}&quot;)">
+        <i class="file text outline icon"></i>
     </button>
 
     <div class="f-right">
         <div class="ui fluid category search">
             <div class="ui icon input">
+                <form role="form" name="search" method="GET" action="{{ url('/search') }}">
+                    {{ csrf_field() }}
+                    <input name="term" type="hidden">
+                </form>
                 <input class="prompt" type="text" placeholder="Search course...">
                 <i class="search icon"></i>
+
             </div>
             <div class="results"></div>
         </div>
@@ -33,33 +44,40 @@
         <th>Description</th>
         <th>Action</th>
     </tr>
-    @foreach ($courses as $course)
-        {{ Form::open(['method' => 'DELETE', 'route' => ['course.destroy', $course->id], 'name' => 'delRoute'.$course->id, 'id'=>'delRoute']) }}
+    @if(empty($course))
+        @foreach ($courses as $course)
+            {{ Form::open(['method' => 'DELETE', 'route' => ['course.destroy', $course->id], 'name' => 'delRoute'.$course->id, 'id'=>'delRoute']) }}
+            <tr>
+                <td><input type="radio"></td>
+                <td>{{ $course->id }}</td>
+                <td>{{ $course->name }}</td>
+                <td>{{ $course->start_date }}</td>
+                <td>{{ $course->end_date }}</td>
+                <td>{{ $course->description }}</td>
+                <td>
+                    <div class="field">
+                        <button class="ui circular facebook icon button"
+                                onclick="app.redirect(&quot;{{route('course.edit', ['course' => $course->id])}}&quot;)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="ui circular twitter icon button"
+                                onclick="app.redirect(&quot;{{route('course.show', ['course' => $course->id])}}&quot;)">
+                            <i class="info icon"></i>
+                        </button>
+                        <button class="ui circular red icon button del-course" type="submit"
+                                onclick="saveSelect('{{$course->id}}')">
+                            <i class="trash icon"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {{ Form::close() }}
+        @endforeach
+    @else
         <tr>
-            <td><input type="radio"></td>
-            <td>{{ $course->id }}</td>
-            <td>{{ $course->name }}</td>
-            <td>{{ $course->start_date }}</td>
-            <td>{{ $course->end_date }}</td>
-            <td>{{ $course->description }}</td>
-            <td>
-                <div class="field">
-                    <button class="ui circular facebook icon button"
-                            onclick="app.redirect(&quot;{{route('course.edit', ['course' => $course->id])}}&quot;)">
-                        <i class="fa fa-edit"></i>
-                    </button>
-                    <button class="ui circular twitter icon button"
-                            onclick="app.redirect(&quot;{{route('course.show', ['course' => $course->id])}}&quot;)">
-                        <i class="info icon"></i>
-                    </button>
-                    <button class="ui circular red icon button del-course" type="submit" onclick="saveSelect('{{$course->id}}')">
-                        <i class="trash icon"></i>
-                    </button>
-                </div>
-            </td>
+            <td>Data Empty</td>
         </tr>
-        {{ Form::close() }}
-    @endforeach
+    @endif
     </tbody>
 </table>
 <div class="paginate f-right">
@@ -68,32 +86,40 @@
 @include('layouts.confirm')
 <script>
 
-    $('form[id="delRoute"]').submit(function(e){
+    $('form[id="delRoute"]').submit(function (e) {
         e.preventDefault();
     });
 
-    $('.btn-confirm').click(function(){
+    $('.btn-confirm').click(function () {
 
-        var selected  = localStorage.getItem('selected');
-        if(typeof selected === undefined)
+        var selected = localStorage.getItem('selected');
+        if (typeof selected === undefined)
             return;
 
         var formName = 'delRoute' + selected;
-        $('form[name="'+ formName +'"]').unbind('submit');
-        $('form[name="'+ formName +'"]').submit();
+        $('form[name="' + formName + '"]').unbind('submit');
+        $('form[name="' + formName + '"]').submit();
     })
 
-    $('.del-course').click(function(){
+    $('.del-course').click(function () {
         $('#confirmModal').modal('show');
     })
 
-    function saveSelect(id){
-        localStorage.setItem('selected',id);
+    function saveSelect(id) {
+        localStorage.setItem('selected', id);
     }
 
-   function del(id){
-       var formName = 'delRoute' + id;
-       $('form[name='+ formName +']').submit();
-   }
+    function del(id) {
+        var formName = 'delRoute' + id;
+        $('form[name=' + formName + ']').submit();
+    }
+
+    $('.prompt').change(function () {
+        app.Loading('show');
+        $('input[name="term"]').val($('.prompt').val());
+        setTimeout(function () {
+            $('form[name="search"]').submit();
+        }, 500);
+    })
 
 </script>

@@ -5,42 +5,44 @@ namespace App;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
 
-class SocialAccountService {
+class SocialAccountService
+{
 
 
-	public function createOrGetUser(ProviderUser $providerUser, $typeAccount) {
-		
-		$account = SocialAccount::whereProvider($typeAccount)
-	            ->whereProviderUserId($providerUser->getId())
-	            ->first();
+    public function createOrGetUser(ProviderUser $providerUser, $typeAccount)
+    {
 
-	       if ($account) {
-	            return $account->user;
-	       } else {
-	        	$account = new SocialAccount([
-	                'provider_user_id' => $providerUser->getId(),
-	                'provider' => $typeAccount,
-	                'avatar' => $providerUser->getAvatar()
-	            ]);	
+        $account = SocialAccount::whereProvider($typeAccount)
+            ->whereProviderUserId($providerUser->getId())
+            ->first();
 
-	             $user = User::whereEmail($providerUser->getEmail())->first();
+        if ($account) {
+            return $account->user;
+        } else {
+            $account = new SocialAccount([
+                'provider_user_id' => $providerUser->getId(),
+                'provider' => $typeAccount,
+                'avatar' => $providerUser->getAvatar()
+            ]);
 
-	            if (!$user) {
+            $user = User::whereEmail($providerUser->getEmail())->first();
 
-	                $user = User::create([
-	                    'email' => $providerUser->getEmail(),
-	                    'name' => $providerUser->getName(),
-	                    'avatar' => $providerUser->getAvatar()
-	                ]);
-	            }
+            if (!$user) {
 
-	            $account->user()->associate($user);
-	            $account->save();
+                $user = User::create([
+                    'email' => $providerUser->getEmail(),
+                    'name' => $providerUser->getName(),
+                    'avatar' => $providerUser->getAvatar()
+                ]);
+            }
 
-	            return $user;
+            $account->user()->associate($user);
+            $account->save();
 
-	        }
-	}
+            return $user;
+
+        }
+    }
 
 }
 

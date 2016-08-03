@@ -81,7 +81,7 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
     {
     }
 
-    public function update($data, $id)
+    public function update($data = [], $id)
     {
         try {
             $course = $this->getById($id);
@@ -115,7 +115,7 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
             DB::transaction(function () use ($course) {
                 $course_subjects = $course->course_subject()->get();
                 foreach ($course_subjects as $cs => $value) {
-                    $conds = ['course_id' =>  $course->id, 'subject_id' => $value->subject_id];
+                    $conds = ['course_id' => $course->id, 'subject_id' => $value->subject_id];
                     $this->courseSubject->where($conds)->delete();
                 }
 
@@ -124,7 +124,7 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
                 }
             });
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
         return true;
@@ -151,9 +151,14 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
         return $subjects_of_course;
     }
 
-    public function findCourseSubject()
+    public function search($key)
     {
-
+        return $this->model->where('id', 'LIKE', '%' . $key . '%')
+            ->orWhere('name', 'LIKE', '%' . $key . '%')
+            ->orWhere('status', 'LIKE', '%' . $key . '%')
+            ->orWhere('start_date', 'LIKE', '%' . $key . '%')
+            ->orWhere('end_date', 'LIKE', '%' . $key . '%')
+            ->orWhere('description', 'LIKE', '%' . $key . '%')->paginate(2);
     }
 
 }

@@ -2,11 +2,6 @@
 
 @section('content')
 
- <div id="_loader" class="loadingArea" style="display: none;">
-      <img src="{{ URL::asset('images/loading.gif') }}" alt="Loading..."> 
-      <p>Loading...</p>
-</div>
-
 <div class="login-container ui middle aligned center aligned grid">
        <!--  <img src="{{ URL::asset('images/framgia.png') }}" class="image"> -->
           <div class="column">
