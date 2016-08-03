@@ -19,3 +19,18 @@ if(!function_exists('course_list')) {
         return route('course.index');
     }
 }
+
+if(!function_exists('render')) {
+    function render($obj, $get_field_name, $type)
+    {
+        if ($type !== 'date') {
+            return !empty($obj) ? $obj->$get_field_name : '';
+        } else {
+            return !empty($obj) ? $obj->$get_field_name : \Carbon\Carbon::now();
+        }
+        
+    }
+}
+
+
+

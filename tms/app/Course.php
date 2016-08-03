@@ -17,4 +17,11 @@ class Course extends Model
                             'status',
                           ];
 
+    protected $dates = ['start_date', 'end_date']; 
+
+    public function course_subject()
+    {
+    	return $this->hasMany(CourseSubject::class);
+    }                  
+
 }

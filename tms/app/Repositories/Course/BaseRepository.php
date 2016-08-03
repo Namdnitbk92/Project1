@@ -15,4 +15,14 @@ abstract class BaseRepository {
 	{
 		return $this->model->findOrFail($id);
 	}
+
+	public function formatDataForSelect($records, $key, $value)
+	{
+		$content = [];
+		foreach($records as $record) {
+            $content[$record->$key] = $record->$value;
+        }
+        return $content;
+	}
+
 }	

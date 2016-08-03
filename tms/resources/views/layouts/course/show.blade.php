@@ -1,41 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="row">
         <div class="col-lg-12 col-md-12 body-content">
             <h2 class="ui dividing header blue">
-                Course Information
+                Course Information Detail
             </h2>
-            {{ Form::open(['url' => (empty($course) ? route('course.store') : route('course.update', ['course'=>$course->id])), 'method' => (empty($course) ? 'POST' : 'PUT'), 'class' => 'ui form']) }}
             <div class="field">
                 <div class="two fields">
                     <div class="field">
-                        <label>Name</label>
-                        <input type="text" name="name" id="name" placeholder="Course Name"
-                               value="{{ render($course, 'name', null) }}">
+                        <label class="ui tag label">Name</label>
+                        <span>{{ $course->name }}</span>
                     </div>
                     <div class="field">
                         <label>Description</label>
-                        <input type="text" name="description" id="description" placeholder="Description"
-                               value="{{ render($course, 'description', null) }}">
+                        <span>{{ $course->description }}</span>
                     </div>
                 </div>
 
                 <div class="two fields">
                     <div class="field">
                         <label>Start Date</label>
-                        {{ Form::date('start_date', render($course, 'start_date', 'date')) }}
+                        <span>{{ $course->start_date }}</span>
                     </div>
                     <div class="field">
                         <label>End Date</label>
-                        {{ Form::date('end_date', render($course, 'end_date', 'date')) }}
+                        <span>{{ $course->end_date }}</span>
                     </div>
                 </div>
                 <div class="two fields">
                     <div class="field">
                         <label>Course Image</label>
-                        {{ Form::file('image_url', ['class'=>'file']) }}
+
                     </div>
                     <div class="field">
                         <label>Status</label>
@@ -45,26 +41,35 @@
                 </div>
             </div>
             <div class="field">
-                <label id="subject_list" data=""></label>
-                <input type="hidden" name="subjectData"/>
                 <div class="panel panel-default pl">
                     <div class="panel-heading">
                         Subject List
                     </div>
                     <div class="panel-body">
-                        <span class='subjectSelected field' style="word-break: break-word;"></span>
+
+                            <div class="ui middle aligned selection list">
+                                @foreach($subjects as $subject)
+                                    <div class="item">
+                                        <img class="ui avatar image" src="{{ asset('images/landing-page.jpg') }}">
+                                        <div class="content">
+                                            <div class="header">{{ $subject[0]->name }}</div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                     </div>
                 </div>
-                {{ Form::select('subjectList', $subjects, null, ['placeholder' => 'Choose subject to course...']) }}
             </div>
             <div class="two field">
                 <div class="field f-right">
-                    <button type="submit" class="ui facebook blue icon button">
-                        <i class="checkmark icon"></i> {{ empty($course) ? 'Create' : 'Update' }}
+                    <button type="submit" class="ui facebook blue icon button" onclick="app.redirect(&quot;{{ route('course.index') }}&quot;)">
+                        <i class="back icon"></i> Back
                     </button>
                 </div>
             </div>
-            {{ Form::close() }}
         </div>
     </div>
+
+
+
 @endsection

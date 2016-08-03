@@ -106,12 +106,12 @@ _app.prototype = {
 			subjectList.change(function() {
 				var temp = container.data('value');
 				var selected = $('.subjectSelected');
-				temp = temp === undefined ? '-' : temp;
+				temp = temp === undefined ? '' : temp;
 
 				if(!subjectList.val())
 					return;
 
-				temp += ', ' + subjectList.val();
+				temp += ',' + subjectList.val();
 				container.data('value',temp);
 				$('input[name="subjectData"]').val(temp);
 				selected.html(container.data('value'));
@@ -231,7 +231,3 @@ $(document).ready(function(){
 	}
 });
 
-
-//# sourceMappingURL=all.js.map
-
-//# sourceMappingURL=all.js.map

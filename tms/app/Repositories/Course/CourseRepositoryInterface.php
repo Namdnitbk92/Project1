@@ -32,14 +32,16 @@ interface CourseRepositoryInterface {
      *
      * @return \Illuminate\Http\Response
      */
-	public function update($id); 
+	public function update($data = [], $id);
 
 	/**
      * Remove data specificed
      *
      * @return \Illuminate\Http\Response
      */
-	public function delete($args = []); 
+	public function delete($args = []);
+
+    public function destroy($id);
 
 	/**
      * Store new data created in create form

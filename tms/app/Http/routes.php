@@ -16,6 +16,12 @@ Route::group(['middleware'=>'web'], function() {
 			Route::resource('admin','AdminController',['only'=>['index','show']]);
 	});
 
+	Route::group(['middleware'=>'admin'],function() {
+			Route::resource('test.course','TestController', [
+				'paramters' => 'singular'
+			]);
+	});
+
 	Route::group(['middleware'=>'sup'],function() {
 			Route::resource('sup','SupController');
 	});
