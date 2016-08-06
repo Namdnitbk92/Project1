@@ -97,6 +97,9 @@
     <script type="text/javascript" src="{{ URL::asset('js/underscore.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/bootstrap.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/all.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/4.2.6/highcharts.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/4.2.6/highcharts-3d.js"></script>
+
 
     <!-- data tables JQuery -->
    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>

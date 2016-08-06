@@ -33,4 +33,5 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Course\CourseRepository'
         );
     }
+
 }

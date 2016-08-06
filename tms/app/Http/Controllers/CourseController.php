@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Repositories\Course\CourseRepositoryInterface;
+use Mockery\CountValidator\Exception;
 
 class CourseController extends Controller
 {
@@ -26,7 +27,8 @@ class CourseController extends Controller
     public function index()
     {
         $courses = $this->courseRepository->getDataPaginate();
-        return view('layouts.course.list', ['courses' => $courses]);
+        $trainees = $this->courseRepository->getTrainees();
+        return view('layouts.course.list', ['courses' => $courses, 'trainees' => $trainees]);
     }
 
     /**
@@ -74,7 +76,9 @@ class CourseController extends Controller
     {
         $course = $this->courseRepository->show($id);
         $subjects = $this->courseRepository->getSubjectOfCourse($id);
-        return view('layouts.course.show', ['course' => $course, 'subjects' => $subjects]);
+        $trainees = $this->courseRepository->getTrainees(['course_id' => $id]);
+
+        return view('layouts.course.show', ['course' => $course, 'subjects' => $subjects, 'trainees' => $trainees]);
     }
 
     /**
@@ -87,6 +91,7 @@ class CourseController extends Controller
     {
         $course = $this->courseRepository->show($id);
         $arrays = $this->courseRepository->getSubjectOfCourse($id);
+        $trainees = $this->courseRepository->getTrainees(['course_id' => $id]);
         $subjects = [];
         foreach ($arrays as $array) {
             $first = $array[0];
@@ -94,7 +99,7 @@ class CourseController extends Controller
                 $subjects[$first->id] = $first->name;
             }
         }
-        return view('layouts.course.edit', ['course' => $course, 'subjects' => $subjects]);
+        return view('layouts.course.edit', ['course' => $course, 'subjects' => $subjects, 'trainees' => $trainees]);
     }
 
     /**
@@ -120,9 +125,9 @@ class CourseController extends Controller
         $result = $this->courseRepository->update($data, $id);
 
         if ($result == false) {
-            return redirect()->route('course.edit',  ['course'=> $id])->withErrors($result)->withInput();
+            return redirect()->route('course.edit', ['course' => $id])->withErrors($result)->withInput();
         }
-        return redirect()->route('course.edit', ['course'=> $id])->withSuccess('add course success!');
+        return redirect()->route('course.edit', ['course' => $id])->withSuccess('add course success!');
     }
 
     /**
@@ -135,7 +140,7 @@ class CourseController extends Controller
     {
         $result = $this->courseRepository->destroy($id);
 
-        if(is_string($result)) {
+        if (is_string($result)) {
             return redirect()->route('course.index')->withErrors('delete errors');
         }
 
@@ -146,6 +151,30 @@ class CourseController extends Controller
     {
         $term = $request->input('term');
         $course = $this->courseRepository->search($term);
-        return view('layouts.course.list',['courses'=>$course, 'search' => true]);
+        return view('layouts.course.list', ['courses' => $course, 'search' => true]);
+    }
+
+    public function destroySelected(Request $request)
+    {
+        $ids = $request->input('ids');
+        $this->courseRepository->destroySelected($ids);
+    }
+
+    public function assignTrainee(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->only(['ids', 'course_id']);
+            try {
+                $result = $this->courseRepository->assignTraineeToCourse($data);
+                if (!$result) {
+                    return response()->json(['error' => 'Assign Trainee Error!']);
+                }
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage());
+            }
+
+        }
+
+        return response()->json(['message' => 'Assign Trainee Successfully!']);
     }
 }

@@ -57,6 +57,32 @@
                 </div>
                 {{ Form::select('subjectList', $subjects, null, ['placeholder' => 'Choose subject to course...']) }}
             </div>
+            <div class="field">
+                <div class="panel panel-default pl">
+                    <div class="panel-heading">
+                        User List
+                    </div>
+                    <div class="panel-body">
+                        @if(isset($trainees) && !empty($trainees))
+                            <div class="ui middle aligned animated list">
+                                @foreach($trainees as $trainee)
+                                    <div class="item">
+                                        <div class="right floated content">
+                                            <button class="ui circular red icon button"><i class="fa fa-trash"></i></button>
+                                        </div>
+                                        <img class="ui avatar image"
+                                             src="{{ empty($trainee->avatar) ? asset('images/trainee.png') : $trainee->avatar}}">
+                                        <div class="content">
+                                            <div class="header">{{ $trainee->name }}</div>
+                                            <div class="field">{{ $trainee->email }}</div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
             <div class="two field">
                 <div class="field f-right">
                     <button type="submit" class="ui facebook blue icon button">

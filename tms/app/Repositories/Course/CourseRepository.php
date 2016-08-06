@@ -5,6 +5,7 @@ namespace App\Repositories\Course;
 use DB;
 use App\Course;
 use App\Subject;
+use App\User;
 use App\CourseSubject;
 use App\Http\Requests\Request;
 use App\Repositories\Course\BaseRepository;
@@ -17,14 +18,17 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
 
     protected $subject;
 
+    protected $user;
+
     protected $task;
 
     protected $courseSubject;
 
-    public function __construct(Course $course, Subject $subject, CourseSubject $courseSubject)
+    public function __construct(Course $course, Subject $subject, User $user, CourseSubject $courseSubject)
     {
         $this->model = $course;
         $this->subject = $subject;
+        $this->user = $user;
         $this->courseSubject = $courseSubject;
     }
 
@@ -45,7 +49,6 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
 
     public function create()
     {
-
         return view('layouts.course.list');
     }
 
@@ -159,6 +162,50 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
             ->orWhere('start_date', 'LIKE', '%' . $key . '%')
             ->orWhere('end_date', 'LIKE', '%' . $key . '%')
             ->orWhere('description', 'LIKE', '%' . $key . '%')->paginate(2);
+    }
+
+    public function destroySelected($ids)
+    {
+        foreach ($ids as $id ) {
+            $this->destroy($id);
+        }
+    }
+
+    public function getTrainees($filter = null)
+    {
+        if(!isset($filter)) {
+            $conds = ['role' => 0];
+            $trainees = $this->user->where($conds)->get();
+        } else {
+            $course = $this->getById($filter['course_id']);
+            $trainees = $course->users()->get();
+        }
+        return $trainees;
+    }
+
+    public function assignTraineeToCourse($data)
+    {
+        $ids = $data['ids'];
+        $course_id = $data['course_id'];
+        $course = $this->getById($course_id);
+        if(isset($ids) && isset($course_id)) {
+            $traineesOfCourse = $course->user_course()->get();
+            foreach ($ids as $key => $id) {
+                foreach ($traineesOfCourse as $trainee) {
+                    if($trainee->user_id == $id) {
+                        unset($ids[$key]);
+                    } else continue;
+                }
+            }
+            if(!empty($ids)) {
+                try {
+                    $course->users()->attach($ids);
+                } catch (Exception $e) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }

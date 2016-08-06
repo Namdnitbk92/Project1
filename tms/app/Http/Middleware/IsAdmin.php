@@ -1,4 +1,4 @@
-p<?php
+<?php
 
 namespace App\Http\Middleware;
 
@@ -16,6 +16,7 @@ class IsAdmin
      */
     public function handle($request, Closure $next)
     {
+
         return $next($request);
     }
 }

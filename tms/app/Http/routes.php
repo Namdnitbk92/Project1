@@ -42,13 +42,26 @@ Route::group(['middleware'=>'web'], function() {
                 'uses'=>'CourseController@search'
             ]);
 
-			Route::get('/dashboard',[
+            Route::post('destroySelected',[
+                'as'=>'search',
+                'uses'=>'CourseController@destroySelected'
+            ]);
+
+            Route::get('getTrainees',[
+                'as'=>'getTrainees',
+                'uses'=>'CourseController@getTrainees'
+            ]);
+
+            Route::post('assignTrainee',[
+                'as'=>'assignTrainee',
+                'uses'=>'CourseController@assignTrainee'
+            ]);
+
+        Route::get('/dashboard',[
 				'as'=>'dashboard',
-				'uses'=>'HomeController@index'	
+				'uses'=>'HomeController@index'
 			]);
 	});
-
-
 
 	Route::group(['prefix'=>'login'],function() {
 
