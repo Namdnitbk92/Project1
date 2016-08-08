@@ -40,4 +40,9 @@ class Course extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function subject()
+    {
+        return $this->belongsToMany(Subject::class);
+    }
+
 }

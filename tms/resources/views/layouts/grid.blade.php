@@ -1,4 +1,5 @@
 <div class="responstable-toolbar">
+    @can('check_CRUD_course', Auth::user())
     <button class="ui circular blue icon button add-course"
             onclick="app.redirect(&quot;{{route('course.create')}}&quot;)">
         <i class="add icon"></i>
@@ -7,7 +8,13 @@
     <button class="ui circular red icon button del-course-multi">
         <i class="trash icon"></i>
     </button>
-
+    @endcan
+    @can('is_user', Auth::user())
+    <button class="ui circular blue icon button my-course"
+            onclick="app.redirect(&quot;{{route('course.index', ['view_course_of_user' => true])}}&quot;)">
+        <i class="list layout icon"></i>
+    </button>
+    @endcan
     <button class="ui circular yellow icon button btn-excel"
             onclick="app.redirect(&quot;{{route('exportExcel')}}&quot;)">
         <i class="file excel outline icon"></i>
@@ -44,7 +51,7 @@
         <th>Description</th>
         <th>Action</th>
     </tr>
-    @if(empty($course))
+    @if(!empty($courses))
         @foreach ($courses as $course)
             {{ Form::open(['method' => 'DELETE', 'route' => ['course.destroy', $course->id], 'name' => 'delRoute'.$course->id, 'id'=>'delRoute']) }}
             <tr>
@@ -57,16 +64,19 @@
                 <td>
                     <div class="two field">
                         <div class="field">
+                            @can('check_CRUD_course', Auth::user())
                             <button class="ui circular facebook icon button"
                                     onclick="app.redirect(&quot;{{route('course.edit', ['course' => $course->id])}}&quot;)">
                                 <i class="fa fa-edit"></i>
                             </button>
+                            @endcan
                             <button class="ui circular twitter icon button"
                                     onclick="app.redirect(&quot;{{route('course.show', ['course' => $course->id])}}&quot;)">
                                 <i class="info icon"></i>
                             </button>
                         </div>
                         <div class="field">
+                            @can('check_CRUD_course', Auth::user())
                             <button class="ui circular red icon button del-course" type="submit"
                                     onclick="saveSelect('{{$course->id}}')">
                                 <i class="trash icon"></i>
@@ -75,6 +85,7 @@
                                     onclick="openAssign('{{ $course->name }}', '{{ $course->id }}')">
                                 <i class="add user icon"></i>
                             </button>
+                            @endcan
                         </div>
                     </div>
                 </td>
@@ -89,10 +100,11 @@
     </tbody>
 </table>
 <div class="paginate f-right">
+    @if(method_exists($courses, 'links'))
     {{ $courses->links() }}
+    @endif
 </div>
-@include('layouts.confirm')
-@include('layouts.course.assign_trainee')
+
 <script>
     localStorage.clear();
 
@@ -230,7 +242,6 @@
         $('#assignModal').modal('show');
         $('course').text(courseName);
         $('#assignModal').attr('course-current', courseId);
-        console.log($('#assignModal').attr('course-current'));
     }
 
 </script>

@@ -24,4 +24,14 @@ class UserCourse extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function subject()
+    {
+        return $this->belongsToMany(Subject::class);
+    }
+
+    public function user_subjects()
+    {
+        return $this->hasMany(UserSubject::class);
+    }
 }

@@ -18,5 +18,8 @@ class CoursePolicy
 
     }
 
-    
+    public function view($user)
+    {
+        return is_admin($user);
+    }
 }

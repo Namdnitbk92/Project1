@@ -24,10 +24,17 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = $this->courseRepository->getDataPaginate();
-        $trainees = $this->courseRepository->getTrainees();
+        $getCourseOfUser = $request->input('view_course_of_user');
+        if (isset($getCourseOfUser)) {
+            $courses = $this->courseRepository->getCourseOfUser();
+            $trainees = [];
+        } else {
+            $courses = $this->courseRepository->getDataPaginate();
+            $trainees = $this->courseRepository->getAllTrainees();
+        }
+
         return view('layouts.course.list', ['courses' => $courses, 'trainees' => $trainees]);
     }
 
@@ -76,7 +83,7 @@ class CourseController extends Controller
     {
         $course = $this->courseRepository->show($id);
         $subjects = $this->courseRepository->getSubjectOfCourse($id);
-        $trainees = $this->courseRepository->getTrainees(['course_id' => $id]);
+        $trainees = $this->courseRepository->getTraineesOfCourse(['course_id' => $id]);
 
         return view('layouts.course.show', ['course' => $course, 'subjects' => $subjects, 'trainees' => $trainees]);
     }
@@ -91,7 +98,8 @@ class CourseController extends Controller
     {
         $course = $this->courseRepository->show($id);
         $arrays = $this->courseRepository->getSubjectOfCourse($id);
-        $trainees = $this->courseRepository->getTrainees(['course_id' => $id]);
+        $trainees = $this->courseRepository->getTraineesOfCourse(['course_id' => $id]);
+        $allTrainees = $this->courseRepository->getAllTraineesWithoutCourse($trainees);
         $subjects = [];
         foreach ($arrays as $array) {
             $first = $array[0];
@@ -99,7 +107,13 @@ class CourseController extends Controller
                 $subjects[$first->id] = $first->name;
             }
         }
-        return view('layouts.course.edit', ['course' => $course, 'subjects' => $subjects, 'trainees' => $trainees]);
+        return view('layouts.course.edit',
+            [
+                'course' => $course,
+                'subjects' => $subjects,
+                'trainees' => $trainees,
+                'allTrainees' => $allTrainees
+            ]);
     }
 
     /**
@@ -118,6 +132,7 @@ class CourseController extends Controller
             'end_date',
             'image_url',
             'subjectData',
+            'userInCourses',
         ]);
 
         $data['subjectList'] = explode(',', $data['subjectData']);
@@ -127,6 +142,7 @@ class CourseController extends Controller
         if ($result == false) {
             return redirect()->route('course.edit', ['course' => $id])->withErrors($result)->withInput();
         }
+
         return redirect()->route('course.edit', ['course' => $id])->withSuccess('add course success!');
     }
 

@@ -28,4 +28,6 @@
             </div>
         </div>
     </div>
+    @include('layouts.confirm')
+    @include('layouts.course.assign_trainee')
 @endsection

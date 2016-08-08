@@ -12,7 +12,7 @@
                 <a href="{{ course_list() }}"><i class="fa fa-table fa-fw"></i> Course</a>
             </li>
             <li>
-                <a href="forms.html"><i class="fa fa-book fa-fw"></i> Subject</a>
+                <a href="{{ route('user.subject.index', ['user' => auth()->user()->name]) }}"><i class="fa fa-book fa-fw"></i> Subject</a>
             </li>
             <li>
                 <a href="forms.html"><i class="fa fa-tasks fa-fw"></i> Task</a>

@@ -3,19 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Repositories\Course\CourseRepositoryInterface;
 use App\Http\Requests;
 
 class UserController extends Controller
 {
+    protected $courseRepository;
+    public function __construct(CourseRepositoryInterface $courseRepository)
+    {
+        $this->courseRepository = $courseRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('home');
+        $view_subject_of_user = $request->input('view_subject_of_user');
+        if(isset($view_subject_of_user)) {
+            $subjects = $this->courseRepository->getSubjectsOfUser();
+        } else {
+            $subjects = $this->courseRepository->getSubjects(5);
+        }
+
+        return view('layouts.user.subject.index', ['subjects' => $subjects]);
     }
 
     /**

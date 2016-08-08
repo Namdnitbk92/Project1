@@ -10,86 +10,87 @@
 |
 */
 
-Route::group(['middleware'=>'web'], function() {
+Route::group(['middleware' => 'web'], function () {
 
-	Route::group(['middleware'=>'admin'],function() {
-			Route::resource('admin','AdminController',['only'=>['index','show']]);
-	});
+    Route::group(['middleware' => 'admin'], function () {
+        Route::resource('admin', 'AdminController', ['only' => ['index', 'show']]);
+    });
 
-	Route::group(['middleware'=>'sup'],function() {
-			Route::resource('sup','SupController');
-	});
+    Route::group(['middleware' => 'sup'], function () {
+        Route::resource('sup', 'SupController');
+    });
 
-	Route::group(['middleware'=>'user'],function() {
-			Route::resource('user','UserController');
-	});
+    Route::group(['middleware' => 'user'], function () {
+        Route::resource('user', 'UserController');
+        Route::resource('user.subject', 'UserController', ['only' => ['index']]);
+    });
 
-	Route::group(['middleware'=>'auth'],function() {
-			Route::resource('course','CourseController');
+    Route::group(['middleware' => 'auth'], function () {
+        Route::resource('course', 'CourseController');
 
-            Route::get('exportExcel',[
-                'as'=>'exportExcel',
-                'uses'=>'HomeController@exportExcel'
-            ]);
+        Route::get('exportExcel', [
+            'as' => 'exportExcel',
+            'uses' => 'HomeController@exportExcel'
+        ]);
 
-            Route::get('exportCSV',[
-                'as'=>'exportCSV',
-                'uses'=>'HomeController@exportCSV'
-            ]);
+        Route::get('exportCSV', [
+            'as' => 'exportCSV',
+            'uses' => 'HomeController@exportCSV'
+        ]);
 
-            Route::get('search',[
-                'as'=>'search',
-                'uses'=>'CourseController@search'
-            ]);
+        Route::get('search', [
+            'as' => 'search',
+            'uses' => 'CourseController@search'
+        ]);
 
-            Route::post('destroySelected',[
-                'as'=>'search',
-                'uses'=>'CourseController@destroySelected'
-            ]);
+        Route::post('destroySelected', [
+            'as' => 'search',
+            'uses' => 'CourseController@destroySelected'
+        ]);
 
-            Route::get('getTrainees',[
-                'as'=>'getTrainees',
-                'uses'=>'CourseController@getTrainees'
-            ]);
+        Route::get('getTrainees', [
+            'as' => 'getTrainees',
+            'uses' => 'CourseController@getTrainees'
+        ]);
 
-            Route::post('assignTrainee',[
-                'as'=>'assignTrainee',
-                'uses'=>'CourseController@assignTrainee'
-            ]);
+        Route::post('assignTrainee', [
+            'as' => 'assignTrainee',
+            'uses' => 'CourseController@assignTrainee'
+        ]);
 
-        Route::get('/dashboard',[
-				'as'=>'dashboard',
-				'uses'=>'HomeController@index'
-			]);
-	});
+        Route::get('/dashboard', [
+            'as' => 'dashboard',
+            'uses' => 'HomeController@index'
+        ]);
+    });
 
-	Route::group(['prefix'=>'login'],function() {
+    Route::group(['prefix' => 'login'], function () {
 
-		Route::get('socialNetwork/callback',[
-				'as' => 'callbackSocial',
-				'uses' => 'SocialAuthController@callback',
-		]);
+        Route::get('socialNetwork/callback', [
+            'as' => 'callbackSocial',
+            'uses' => 'SocialAuthController@callback',
+        ]);
 
-		Route::get('socialNetwork/callbackTwitter',[
-			'as' => 'loginWithSocialNetwork',
-			'uses' => 'SocialAuthController@callbackTwitter',
-		]);
+        Route::get('socialNetwork/callbackTwitter', [
+            'as' => 'loginWithSocialNetwork',
+            'uses' => 'SocialAuthController@callbackTwitter',
+        ]);
 
-		Route::get('socialNetwork/callbackGmail',[
-			'as' => 'loginWithSocialNetwork',
-			'uses' => 'SocialAuthController@callbackGmail',
-		]);
+        Route::get('socialNetwork/callbackGmail', [
+            'as' => 'loginWithSocialNetwork',
+            'uses' => 'SocialAuthController@callbackGmail',
+        ]);
 
-		Route::get('{accountSocial}/redirect',[
-			'as' => 'loginWithSocialNetwork',
-			'uses' => 'SocialAuthController@redirect',
-		]);
+        Route::get('{accountSocial}/redirect', [
+            'as' => 'loginWithSocialNetwork',
+            'uses' => 'SocialAuthController@redirect',
+        ]);
 
-	});
+    });
 
-	Route::get('/', function () {
-	    return view('welcome');
-	});
+    Route::get('/', function () {
+        return view('welcome');
+    });
 });
 
 
