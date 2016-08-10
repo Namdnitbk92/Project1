@@ -4,7 +4,6 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header panel-heading">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title ">Notification</h4>
             </div>
             <div class="modal-body">

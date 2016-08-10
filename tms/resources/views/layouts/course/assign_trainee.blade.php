@@ -6,7 +6,7 @@
                     Assign Trainee To Course <i class="pointing right icon"></i>
                     <course class="ui label tag red"></course>
                     </label>
-                    <button class="ui circular google plus icon button">
+                    <button class="ui circular google plus icon button btn-trainee">
                         <value class="total-trainee"> 0 trainee</value>
                     </button>
                 </h4>
@@ -57,7 +57,9 @@
 <script>
     var joins = [];
     function addCourse(userId) {
+
         if (!_.contains(joins, userId)) {
+            $('.btn-trainee').transition('jiggle');
             joins.push(userId);
         }
         $('.total-trainee').text(joins.length + ' trainee');
@@ -66,6 +68,7 @@
     function removeCourse(userId) {
         var index = _.indexOf(joins, userId);
         if (index != -1) {
+            $('.btn-trainee').transition('jiggle');
             joins.splice(_.indexOf(joins, userId), 1);
         }
         $('.total-trainee').text(joins.length + ' trainee');

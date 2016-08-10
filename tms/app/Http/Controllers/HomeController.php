@@ -6,13 +6,14 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Services\ExportServices;
 use App\Course;
+use App\Services\Utils;
 use Excel;
 
 class HomeController extends Controller
 {
     protected $course;
     protected $config;
-
+    use Utils;
     /**
      * Create a new controller instance.
      *
@@ -33,6 +34,15 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function getActivities(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['data' => $this->getActivity()]);
+        }
+
+        return response()->json(['data' => $this->getActivity()]);
     }
 
     public function export($exportType)

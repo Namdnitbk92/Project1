@@ -8,6 +8,9 @@
     <button class="ui circular red icon button del-course-multi">
         <i class="trash icon"></i>
     </button>
+    <button class="ui circular blue icon button share-fb-btn">
+        <i class="facebook icon"></i>
+    </button>
     @endcan
     @can('is_user', Auth::user())
     <button class="ui circular blue icon button my-course"
@@ -106,7 +109,36 @@
 </div>
 
 <script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '275578219472356',
+            xfbml      : true,
+            version    : 'v2.7'
+        });
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
     localStorage.clear();
+
+    $('.share-fb-btn').click(function(){
+        FB.ui({
+            method: 'feed',
+            display: 'popup',
+            link: 'http://laravel.dev/Project1/tms/public/course',
+            caption: 'Course List',
+            redirect_uri : 'http://laravel.dev/Project1/tms/public/course',
+            name : 'Laravel dev',
+            description : 'This is course list',
+            picture : 'http://www.phpgang.com/wp-content/themes/PHPGang_v2/img/logo.png',
+        }, function(response){});
+    });
 
     $('.add-course').popup !== undefined ? $('.add-course').popup({
         position : 'top center',

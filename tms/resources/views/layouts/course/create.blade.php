@@ -63,7 +63,7 @@
                 <div class="panel panel-default pl">
                     <div class="panel-heading">
                         User List &nbsp;
-                        <button class="ui circular google plus icon button">
+                        <button class="ui circular google plus icon button btn-trainee">
                             <value class="total-trainee"> 0 trainee in course </value>
                         </button>
                     </div>
@@ -148,6 +148,7 @@
         function removeTrainee(userId) {
             var index = _.indexOf(total_trainee,userId);
             if(index != -1) {
+                $('.btn-trainee').transition('jiggle');
                 total_trainee.splice(_.indexOf(total_trainee,userId), 1);
             }
             $('.total-trainee').text(total_trainee.length + ' trainee in course');
@@ -155,6 +156,7 @@
 
         function addTrainee(userId) {
             if(!_.contains(total_trainee,userId)) {
+                $('.btn-trainee').transition('jiggle');
                 total_trainee.push(userId);
             }
             $('.total-trainee').text(total_trainee.length + ' trainee in course');

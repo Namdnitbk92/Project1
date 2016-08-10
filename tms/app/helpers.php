@@ -38,3 +38,23 @@ if(!function_exists('is_admin')) {
         return $user->role === "1";
     }
 }
+
+if (!function_exists('fill_status')) {
+    function fill_status($status)
+    {
+        switch ($status) {
+            case 1: {
+                return '<label class="ui blue ribbon label">' . config("attr.status.0") . '</label>';
+            }
+            case 2: {
+                return '<label class="ui yellow ribbon label">' . config("attr.status.1") . '</label>';
+            }
+            case 3: {
+                return '<label class="ui red ribbon label">' . config("attr.status.2") . '</label>';
+            }
+            case 4: {
+                return '<label class="ui red ribbon label">' . config("attr.status.3") . '</label>';
+            }
+        }
+    }
+}

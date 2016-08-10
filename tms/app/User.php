@@ -31,7 +31,8 @@ class User extends Authenticatable
 
     public function user_subjects()
     {
-        return $this->belongsToMany(UserSubject::class);
+        /*return $this->belongsToMany(UserSubject::class);*/
+        return $this->hasManyThrough(UserSubject::class, UserCourse::class);
     }
 
     public function courses()

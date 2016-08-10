@@ -22,7 +22,7 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::group(['middleware' => 'user'], function () {
         Route::resource('user', 'UserController');
-        Route::resource('user.subject', 'UserController', ['only' => ['index']]);
+        Route::resource('user.subject', 'UserController', ['only' => ['index', 'show']]);
     });
 
     Route::group(['middleware' => 'auth'], function () {
@@ -62,6 +62,16 @@ Route::group(['middleware' => 'web'], function () {
             'as' => 'dashboard',
             'uses' => 'HomeController@index'
         ]);
+
+        Route::post('/getActivities', [
+            'as' => 'getActivities',
+            'uses' => 'HomeController@getActivities'
+        ]);
+
+        Route::post('user/finishSubject', [
+            'as' => 'finishSubject',
+            'uses' => 'UserController@finishSubject'
+        ]);
     });
 
     Route::group(['prefix' => 'login'], function () {
@@ -89,7 +99,7 @@ Route::group(['middleware' => 'web'], function () {
     });
 
     Route::get('/', function () {
-        return view('welcome');
+        return view('home');
     });
 });
 

@@ -2,6 +2,9 @@
 
 namespace App\Repositories\Course;
 
+use App\Services\Utils;
+use App\UserCourse;
+use App\UserSubject;
 use DB;
 use App\Course;
 use App\Subject;
@@ -10,9 +13,11 @@ use App\CourseSubject;
 use App\Http\Requests\Request;
 use App\Repositories\Course\BaseRepository;
 use App\Repositories\Course\CourseRepositoryInterface;
+use Mockery\CountValidator\Exception;
 
 class CourseRepository extends BaseRepository implements CourseRepositoryInterface
 {
+    use Utils;
 
     protected $trainee;
 
@@ -42,11 +47,6 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
         return $this->model->all();
     }
 
-    public function show($id)
-    {
-        return $this->getById($id);
-    }
-
     public function create()
     {
         return view('layouts.course.list');
@@ -54,22 +54,37 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
 
     public function store($data)
     {
+        $check = false;
+        $course = collect([]);
         try {
-            DB::transaction(function () use ($data) {
-                $course = $this->model->create($data);
-                if ($data['subjectList']) {
-                    $subjects = $data['subjectList'];
-                    $records = [];
-                    foreach ($subjects as $subject) {
-                        if (!empty($subject)) {
-                            array_push($records, ['course_id' => $course->id, 'subject_id' => intval($subject)]);
-                        }
+            DB::beginTransaction();
+            $course = $this->model->create($data);
+            if ($data['subjectList']) {
+                $subjects = $data['subjectList'];
+                $records = [];
+                foreach ($subjects as $subject) {
+                    if (!empty($subject)) {
+                        array_push($records, ['course_id' => $course->id, 'subject_id' => intval($subject)]);
                     }
-                    $this->courseSubject->insert($records);
                 }
-            });
+                $this->courseSubject->insert($records);
+            }
         } catch (Exception $e) {
-            return $e->getMessage();
+            $check = true;
+
+        } finally {
+            if (!$check) {
+                $this->logToActivity(
+                    auth()->user()->id,
+                    $course->id,
+                    Course::class,
+                    config('attr.action_type.create')
+                );
+                DB::commit();
+            } else {
+                DB::rollBack();
+                throw new Exception('create course errors');
+            }
         }
 
         return true;
@@ -81,27 +96,36 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
 
     public function update($data = [], $id)
     {
+        $check = false;
+        $course = collect([]);
         try {
+            DB::beginTransaction();
             $course = $this->getById($id);
-            $course['name'] = $data['name'];
-            $course['description'] = $data['description'];
-            $course['start_date'] = $data['start_date'];
-            $course['end_date'] = $data['end_date'];
-            $course['image_url'] = $data['image_url'];
-            $course['status'] = $data['image_url'];
-
-            $course->save();
-
+            $course->update($data);
             $users = $data['userInCourses'];
-            if(isset($users) && !empty($users)) {
-                $users = explode(',',$users);
+            if (isset($users) && !empty($users)) {
+                $users = explode(',', $users);
                 $course->users()->sync($users);
-            }else {
+            } else {
                 $course->user_course()->delete();
             }
 
         } catch (Exception $e) {
-            return $e->getMessage();
+            $check = true;
+        } finally {
+
+            if (!$check) {
+                $this->logToActivity(
+                    auth()->user()->id,
+                    $course->id,
+                    Course::class,
+                    config('attr.action_type.update')
+                );
+                DB::commit();
+            } else {
+                DB::rollBack();
+                throw new Exception('update course errors');
+            }
         }
 
         return true;
@@ -113,33 +137,10 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
 
     }
 
-    public function destroy($id)
-    {
-        try {
-            $course = $this->getById($id);
-
-            DB::transaction(function () use ($course) {
-                $course_subjects = $course->course_subject()->get();
-                foreach ($course_subjects as $cs => $value) {
-                    $conds = ['course_id' => $course->id, 'subject_id' => $value->subject_id];
-                    $this->courseSubject->where($conds)->delete();
-                }
-
-                if (!empty($course)) {
-                    $course->delete();
-                }
-            });
-
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-        return true;
-    }
-
     public function getSubjects($limit = null)
     {
         $subjects = [];
-        if($limit !== null) {
+        if ($limit !== null) {
             $subjects = $this->subject->paginate($limit);
         } else {
             $subjects = $this->subject->all();
@@ -150,20 +151,29 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
 
     public function getSubjectsOfUser()
     {
-        $subjects = auth()->user()->courses()->get()->map(function($course){
-            return $course->subject()->get();
-        })->reject(function($value, $key){
-            return $value->isEmpty();
+        $user = auth()->user();
+        if ($user == null) {
+            return;
+        }
+        $user_subjects = $user->user_subjects()->get();
+        $subjects = $user_subjects->map(function ($user_subject) {
+            $subject = $user_subject->subject()->first();
+            $temp = app()->make('stdClass');
+            $temp->id = $user_subject->id;
+            $temp->user_course_id = $user_subject->user_course_id;
+            $temp->course_id = UserCourse::find($user_subject->user_course_id)->course_id;
+            $temp->subject_id = $user_subject->subject_id;
+            $temp->start_date = $user_subject->start_date;
+            $temp->end_date = $user_subject->end_date;
+            $temp->status = $user_subject->status;
+            $temp->progress = $user_subject->progress;
+            $temp->subject_name = $subject->name;
+            $temp->description = $subject->description;
+
+            return $temp;
         });
-        $array = collect([]);
-        $subjects->each(function($value, $key) use ($array){
-            $value->each(function($value, $key) use ($array) {
-                if(!$array->contains($value)) {
-                    $array->push($value);
-                }
-            });
-        });
-        return $array;
+
+        return $subjects;
     }
 
     public function getSubjectOfCourse($id)
@@ -182,6 +192,11 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
         return $subjects_of_course;
     }
 
+    public function show($id)
+    {
+        return $this->getById($id);
+    }
+
     public function search($key)
     {
         return $this->model->where('id', 'LIKE', '%' . $key . '%')
@@ -194,9 +209,51 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
 
     public function destroySelected($ids)
     {
-        foreach ($ids as $id ) {
+        foreach ($ids as $id) {
             $this->destroy($id);
         }
+    }
+
+    public function findSubjectById($id)
+    {
+        return $this->subject->findOrFail($id);
+    }
+
+    public function destroy($id)
+    {
+        $check = false;
+        try {
+            DB::beginTransaction();
+            $course = $this->getById($id);
+            $course_subjects = $course->course_subject()->get();
+            foreach ($course_subjects as $cs => $value) {
+                $conds = ['course_id' => $course->id, 'subject_id' => $value->subject_id];
+                $this->courseSubject->where($conds)->delete();
+            }
+
+            if (!empty($course)) {
+                $course->delete();
+            }
+
+        } catch (Exception $e) {
+            $check = true;
+            DB::rollBack();
+        } finally {
+
+            if (!$check) {
+                $this->logToActivity(
+                    auth()->user()->id,
+                    $course->id,
+                    Course::class,
+                    config('attr.action_type.update')
+                );
+                DB::commit();
+            } else {
+                DB::rollBack();
+                throw new Exception('delete course errors');
+            }
+        }
+        return true;
     }
 
     public function getAllTrainees()
@@ -207,7 +264,7 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
     public function getTraineesOfCourse($filter = null)
     {
         $trainees = [];
-        if($filter['course_id']) {
+        if ($filter['course_id']) {
             $course = $this->getById($filter['course_id']);
             $trainees = $course->users()->get();
         }
@@ -216,7 +273,7 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
 
     public function getAllTraineesWithoutCourse($trainees = [])
     {
-        $ids = $trainees -> map(function ($trainee) {
+        $ids = $trainees->map(function ($trainee) {
             return $trainee->id;
         });
         return $this->user->whereNotIn('id', $ids)->where('role', 0)->get();
@@ -227,16 +284,16 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
         $ids = $data['ids'];
         $course_id = $data['course_id'];
         $course = $this->getById($course_id);
-        if(isset($ids) && isset($course_id)) {
+        if (isset($ids) && isset($course_id)) {
             $traineesOfCourse = $course->user_course()->get();
             foreach ($ids as $key => $id) {
                 foreach ($traineesOfCourse as $trainee) {
-                    if($trainee->user_id == $id) {
+                    if ($trainee->user_id == $id) {
                         unset($ids[$key]);
                     } else continue;
                 }
             }
-            if(!empty($ids)) {
+            if (!empty($ids)) {
                 try {
                     $course->users()->attach($ids);
                 } catch (Exception $e) {
@@ -254,4 +311,23 @@ class CourseRepository extends BaseRepository implements CourseRepositoryInterfa
         return $courses;
     }
 
+    public function finishSubject($id)
+    {
+        try {
+            $user_subject = UserSubject::findOrFail($id);
+            $user_subject->status = 4;//set status to finish
+            $user_subject->save();
+
+            $this->logToActivity(
+                auth()->user()->id,
+                $user_subject->id,
+                UserSubject::class,
+                config('attr.action_type.finish')
+            );
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
+    }
 }
